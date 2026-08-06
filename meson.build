@@ -69,3 +69,8 @@ import('pkgconfig').generate(
     description: 'Library for dbus-sensors APISensor reactor',
 )
 
+tests_opt = get_option('tests')
+if tests_opt.enabled()
+    subdir('tests')
+endif
+
