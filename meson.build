@@ -18,10 +18,10 @@ sdeventplus = dependency('sdeventplus')
 phosphor_logging_dep = dependency('phosphor-logging')
 libudev = dependency('libudev', required : false, include_type: 'system')
 uring = dependency('liburing', include_type: 'system')
-boost_dep = dependency(
-    'boost',
-    modules: ['coroutine'],
-)
+# boost coroutine/context ship no .pc; resolve via the compiler search so the
+# generated .pc records -l flags instead of absolute sysroot paths.
+boost_coroutine = meson.get_compiler('cpp').find_library('boost_coroutine')
+boost_context = meson.get_compiler('cpp').find_library('boost_context')
 
 add_project_arguments(
     '-Wno-psabi',
@@ -43,7 +43,8 @@ default_deps = [
     threads,
     i2c,
     boost,
-    boost_dep,
+    boost_coroutine,
+    boost_context,
     nlohmann_json_dep,
     phosphor_logging_dep,
     sdbusplus,
